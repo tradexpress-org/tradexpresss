@@ -1,96 +1,86 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const searchInput = document.getElementById('tx-search-input');
-    const suggestionsBox = document.getElementById('suggestions-box');
+    // --- CALENDAR LOGIC ---
+    const monthYearEl = document.getElementById('calendar-month-year');
+    const calendarGrid = document.getElementById('calendar-grid');
+    const today = new Date();
     
-    if (!searchInput || !suggestionsBox) return;
-
-    let searchDatabase = [];
-
-    // 1. Fetch JSON and build a flat suggestion database (Titles, Agencies, HS Codes, and Tags)
-    fetch('./articles.json')
-        .then(res => res.json())
-        .then(articles => {
-            const tempSet = new Set();
-            
-            articles.forEach(article => {
-                if (article.title) tempSet.add({ text: article.title, type: 'Topic', id: article.id });
-                if (article.agency) tempSet.add({ text: article.agency, type: 'Agency', id: article.id });
-                if (article.hs && article.hs !== "N/A") tempSet.add({ text: `HS Code ${article.hs}`, type: 'HS Code', id: article.id });
-                if (article.tags) {
-                    article.tags.forEach(tag => tempSet.add({ text: tag, type: 'Tag', id: article.id }));
-                }
-            });
-            
-            searchDatabase = Array.from(tempSet);
-        })
-        .catch(err => console.error("Error initializing suggestions:", err));
-
-    // 2. Listen to visitor typing
-    searchInput.addEventListener('input', (e) => {
-        const query = e.target.value.toLowerCase().trim();
-        suggestionsBox.innerHTML = '';
-        
-        if (query.length < 1) {
-            suggestionsBox.style.display = 'none';
-            return;
-        }
-
-        // Filter database matches
-        const matches = searchDatabase.filter(item => 
-            item.text.toLowerCase().includes(query)
-        ).slice(0, 6); // Limit to top 6 matches
-
-        if (matches.length === 0) {
-            suggestionsBox.style.display = 'none';
-            return;
-        }
-
-        // Render matching suggestion elements
-        suggestionsBox.innerHTML = matches.map(match => `
-            <div class="suggestion-item" data-id="${match.id}" data-text="${match.text}"
-                 style="padding: 10px 15px; cursor: pointer; border-bottom: 1px solid #1e293b; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: #cbd5e1; transition: background 0.15s;">
-                <span>${match.text}</span>
-                <span style="font-size: 0.7rem; color: #38bdf8; background: #0c4a6e; padding: 2px 6px; border-radius: 4px;">${match.type}</span>
-            </div>
-        `).join('');
-
-        suggestionsBox.style.display = 'block';
-    });
-
-    // Hover design & Selection events
-    suggestionsBox.addEventListener('mouseover', (e) => {
-        const item = e.target.closest('.suggestion-item');
-        if (item) item.style.background = '#1e293b';
-    });
+    const daysOfWeek = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
     
-    suggestionsBox.addEventListener('mouseout', (e) => {
-        const item = e.target.closest('.suggestion-item');
-        if (item) item.style.background = 'transparent';
-    });
+    // Set headers
+    monthYearEl.innerText = today.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    calendarGrid.innerHTML = daysOfWeek.map(d => `<div style="font-weight:600; color:#64748b; padding-bottom:5px;">${d}</div>`).join('');
+    
+    const firstDayIndex = new Date(today.getFullYear(), today.getMonth(), 1).getDay();
+    const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+    
+    // Blank days before first day of month
+    for (let i = 0; i < firstDayIndex; i++) {
+        calendarGrid.innerHTML += `<div></div>`;
+    }
+    
+    // Populate month days
+    for (let day = 1; day <= lastDay; day++) {
+        const isToday = day === today.getDate();
+        const dayStyle = isToday 
+            ? `background: #38bdf8; color: #0f172a; font-weight: bold; border-radius: 6px;` 
+            : `background: #1e293b; border-radius: 6px;`;
+            
+        calendarGrid.innerHTML += `<div style="padding: 8px 0; ${dayStyle}">${day}</div>`;
+    }
 
-    suggestionsBox.addEventListener('click', (e) => {
-        const item = e.target.closest('.suggestion-item');
-        if (item) {
-            const targetText = item.getAttribute('data-text');
-            const targetId = item.getAttribute('data-id');
-            
-            searchInput.value = targetText;
-            suggestionsBox.style.display = 'none';
-            
-            // Auto scroll directly to the matching article card on the page
-            const targetCard = document.getElementById(targetId);
-            if (targetCard) {
-                targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                targetCard.style.outline = '2px solid #38bdf8';
-                setTimeout(() => targetCard.style.outline = 'none', 2000);
-            }
+    // --- TO-DO LIST LOGIC ---
+    const todoInput = document.getElementById('todo-input');
+    const addTodoBtn = document.getElementById('add-todo-btn');
+    const todoList = document.getElementById('todo-list');
+    
+    // Load existing items from localStorage
+    let savedTasks = JSON.parse(localStorage.getItem('tx_tasks')) || [
+        { text: "Coordinate container tracking with Broker Ferddy", completed: false },
+        { text: "Verify updated HS codes inside articles.json", completed: true }
+    ];
+
+    function renderTasks() {
+        todoList.innerHTML = '';
+        savedTasks.forEach((task, index) => {
+            const li = document.createElement('li');
+            li.style = "display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #1e293b; border-radius: 6px; margin-bottom: 8px; font-size: 0.85rem;";
+            if (task.completed) li.style.opacity = "0.5";
+
+            li.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 8px; flex: 1; cursor: pointer;" onclick="toggleTask(${index})">
+                    <input type="checkbox" ${task.completed ? 'checked' : ''} style="cursor: pointer;">
+                    <span style="${task.completed ? 'text-decoration: line-through;' : ''}">${task.text}</span>
+                </div>
+                <button onclick="deleteTask(${index})" style="background: none; border: none; color: #ef4444; cursor: pointer; font-size: 1rem; padding: 0 4px;">&times;</button>
+            `;
+            todoList.appendChild(li);
+        });
+        localStorage.setItem('tx_tasks', JSON.stringify(savedTasks));
+    }
+
+    window.toggleTask = (index) => {
+        savedTasks[index].completed = !savedTasks[index].completed;
+        renderTasks();
+    };
+
+    window.deleteTask = (index) => {
+        savedTasks.splice(index, 1);
+        renderTasks();
+    };
+
+    addTodoBtn.addEventListener('click', () => {
+        const text = todoInput.value.trim();
+        if (text) {
+            savedTasks.push({ text, completed: false });
+            todoInput.value = '';
+            renderTasks();
         }
     });
 
-    // Close suggestions box if visitor clicks outside
-    document.addEventListener('click', (e) => {
-        if (!e.target.closest('.search-container')) {
-            suggestionsBox.style.display = 'none';
-        }
+    todoInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') addTodoBtn.click();
     });
+
+    renderTasks();
 });
+</script>

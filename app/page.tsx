@@ -41,7 +41,7 @@ export default function Page() {
   const [isLoading, setIsLoading] = useState(true);
 
   const bumpCount = (key: string) => {
-    setClickCounts((prev) => ({ ...prev, [key]: (prev[key] ?? 0) + 1 }));
+    setClickCounts((prev) => ({ ...prev, [key]: (prev[any] ?? 0) + 1 }));
   };
 
   const tags = useMemo(() => {

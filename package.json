@@ -1,0 +1,15 @@
+{
+  "name": "tradexpress-static",
+  "version": "1.0.0",
+  "description": "TradExpress Static Platform",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@types/node": "^26.1.1",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "typescript": "^7.0.2"
+  }
+}
