@@ -1,28 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8" />
     <meta http-equiv="refresh" content="0; url=../" />
     <link rel="canonical" href="../" />
     <title>TX Alias</title>
-  </head>
-  <body>
-    <p>Redirecting to the main TradExpress page…</p>
-    <script>window.location.replace('../');</script>
-  </body><!-- Done Paste it right here at the bottom of tx/index.html -->
+</head>
+<body>
+    <p>Redirecting to the main TradExpress page...</p>
     <script>
-    document.querySelectorAll('.trade-course-item').forEach(item => {
-        const playButton = item.querySelector('.play-btn');
-        if (playButton) {
-            playButton.addEventListener('click', (e) => {
-                e.preventDefault();
-                item.classList.toggle('expanded');
-                playButton.style.transform = item.classList.contains('expanded') 
-                    ? 'rotate(90deg)' 
-                    : 'rotate(0deg)';
-            });
-        }
-    });
+        window.location.replace('../');
     </script>
 </body>
 </html>
