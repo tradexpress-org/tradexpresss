@@ -1,114 +1,96 @@
-[
-  {
-    "id": "boc-red-lane",
-    "title": "Surviving the BOC Red Lane: Customs Selectivity Explained",
-    "category": "Customs Clearance",
-    "agency": "BOC",
-    "hs": "N/A",
-    "date": "2026-07-16",
-    "readTime": "6 min read",
-    "summary": "Demystifying the Bureau of Customs channel selectivity system. Learn why shipments get flagged for physical inspection and how to expedite your release.",
-    "author": "TradExpress.co",
-    "writer": "TradExpress.co",
-    "publisher": "TradExpress.co",
-    "copyright": "© 2026 TradExpress.co",
-    "source": "https://tradexpress.co",
-    "tags": ["BOC", "Red Lane", "Customs Inspection", "Compliance"]
-  },
-  {
-    "id": "fda-food-lto-cpr",
-    "title": "FDA Food Guide: Navigating LTO vs CPR Requirements",
-    "category": "Food Importation",
-    "agency": "FDA",
-    "hs": "1806.90",
-    "date": "2026-07-15",
-    "readTime": "7 min read",
-    "summary": "A comprehensive breakdown of securing your License to Operate (LTO) before applying for a Certificate of Product Registration (CPR) for imported food products.",
-    "author": "TradExpress.co",
-    "writer": "TradExpress.co",
-    "publisher": "TradExpress.co",
-    "copyright": "© 2026 TradExpress.co",
-    "source": "https://tradexpress.co",
-    "tags": ["FDA Food", "LTO", "CPR", "Food Import"]
-  },
-  {
-    "id": "fda-cosmetics-lipstick-perfume",
-    "title": "FDA Cosmetics: Notification Rules for Lipsticks and Perfumes",
-    "category": "Cosmetics",
-    "agency": "FDA",
-    "hs": "3304.10",
-    "date": "2026-07-14",
-    "readTime": "5 min read",
-    "summary": "Step-by-step compliance checklist for cosmetic notifications, chemical restrictions, and calculating import duties on luxury beauty shipments.",
-    "author": "TradExpress.co",
-    "writer": "TradExpress.co",
-    "publisher": "TradExpress.co",
-    "copyright": "© 2026 TradExpress.co",
-    "source": "https://tradexpress.co",
-    "tags": ["FDA Cosmetics", "Lipstick", "Perfume", "Duty Rate"]
-  },
-  {
-    "id": "bpi-fruits-veg-sps",
-    "title": "BPI Regulations: Securing SPS Clearance for Fruits and Vegetables",
-    "category": "Agricultural Import",
-    "agency": "BPI",
-    "hs": "0808.10",
-    "date": "2026-07-12",
-    "readTime": "8 min read",
-    "summary": "Don't risk cargo destruction. How to correctly apply for the Sanitary and Phytosanitary Import Clearance (SPSIC) before fresh produce departs the port of origin.",
-    "author": "TradExpress.co",
-    "writer": "TradExpress.co",
-    "publisher": "TradExpress.co",
-    "copyright": "© 2026 TradExpress.co",
-    "source": "https://tradexpress.co",
-    "tags": ["BPI", "SPS Clearance", "Agriculture", "Fresh Produce"]
-  },
-  {
-    "id": "dti-bps-ps-mark",
-    "title": "DTI/BPS Compliance: Mandatory PS Mark and ICC 73 Product Lists",
-    "category": "Standards & Technical Regulations",
-    "agency": "DTI",
-    "hs": "7214.20",
-    "date": "2026-07-10",
-    "readTime": "10 min read",
-    "summary": "A definitive guide to critical products requiring Import Commodity Clearance (ICC) and Philippine Standard (PS) safety certifications—featuring steel, cement, and electrical devices.",
-    "author": "TradExpress.co",
-    "writer": "TradExpress.co",
-    "publisher": "TradExpress.co",
-    "copyright": "© 2026 TradExpress.co",
-    "source": "https://tradexpress.co",
-    "tags": ["DTI", "BPS", "ICC Certificate", "PS Mark", "Steel", "Cement"]
-  },
-  {
-    "id": "ntc-telecom-clearance",
-    "title": "NTC Type Approval: Importing Routers, Drones, and Smart Devices",
-    "category": "Telecommunications",
-    "agency": "NTC",
-    "hs": "8517.62",
-    "date": "2026-07-08",
-    "readTime": "6 min read",
-    "summary": "Avoid seizure at customs. Step-by-step walkthrough for filing NTC permits, type certificates, and coordinating with CAAP for commercial drone imports.",
-    "author": "TradExpress.co",
-    "writer": "TradExpress.co",
-    "publisher": "TradExpress.co",
-    "copyright": "© 2026 TradExpress.co",
-    "source": "https://tradexpress.co",
-    "tags": ["NTC", "Type Approval", "Drones", "Wireless Devices"]
-  },
-  {
-    "id": "logistics-hidden-fees",
-    "title": "Port Logistics: Spotting and Avoiding Hidden Port Charges",
-    "category": "Supply Chain & Logistics",
-    "agency": "BOC",
-    "hs": "N/A",
-    "date": "2026-07-05",
-    "readTime": "9 min read",
-    "summary": "Break down the true costs of shipping. How to budget for Arrastre, Wharfage, and establish strategies to completely bypass demurrage and detention fees.",
-    "author": "TradExpress.co",
-    "writer": "TradExpress.co",
-    "publisher": "TradExpress.co",
-    "copyright": "© 2026 TradExpress.co",
-    "source": "https://tradexpress.co",
-    "tags": ["Logistics", "Demurrage", "Arrastre", "Wharfage", "Port Charges"]
-  }
-]
+document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.getElementById('tx-search-input');
+    const suggestionsBox = document.getElementById('suggestions-box');
+    
+    if (!searchInput || !suggestionsBox) return;
+
+    let searchDatabase = [];
+
+    // 1. Fetch JSON and build a flat suggestion database (Titles, Agencies, HS Codes, and Tags)
+    fetch('./articles.json')
+        .then(res => res.json())
+        .then(articles => {
+            const tempSet = new Set();
+            
+            articles.forEach(article => {
+                if (article.title) tempSet.add({ text: article.title, type: 'Topic', id: article.id });
+                if (article.agency) tempSet.add({ text: article.agency, type: 'Agency', id: article.id });
+                if (article.hs && article.hs !== "N/A") tempSet.add({ text: `HS Code ${article.hs}`, type: 'HS Code', id: article.id });
+                if (article.tags) {
+                    article.tags.forEach(tag => tempSet.add({ text: tag, type: 'Tag', id: article.id }));
+                }
+            });
+            
+            searchDatabase = Array.from(tempSet);
+        })
+        .catch(err => console.error("Error initializing suggestions:", err));
+
+    // 2. Listen to visitor typing
+    searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        suggestionsBox.innerHTML = '';
+        
+        if (query.length < 1) {
+            suggestionsBox.style.display = 'none';
+            return;
+        }
+
+        // Filter database matches
+        const matches = searchDatabase.filter(item => 
+            item.text.toLowerCase().includes(query)
+        ).slice(0, 6); // Limit to top 6 matches
+
+        if (matches.length === 0) {
+            suggestionsBox.style.display = 'none';
+            return;
+        }
+
+        // Render matching suggestion elements
+        suggestionsBox.innerHTML = matches.map(match => `
+            <div class="suggestion-item" data-id="${match.id}" data-text="${match.text}"
+                 style="padding: 10px 15px; cursor: pointer; border-bottom: 1px solid #1e293b; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: #cbd5e1; transition: background 0.15s;">
+                <span>${match.text}</span>
+                <span style="font-size: 0.7rem; color: #38bdf8; background: #0c4a6e; padding: 2px 6px; border-radius: 4px;">${match.type}</span>
+            </div>
+        `).join('');
+
+        suggestionsBox.style.display = 'block';
+    });
+
+    // Hover design & Selection events
+    suggestionsBox.addEventListener('mouseover', (e) => {
+        const item = e.target.closest('.suggestion-item');
+        if (item) item.style.background = '#1e293b';
+    });
+    
+    suggestionsBox.addEventListener('mouseout', (e) => {
+        const item = e.target.closest('.suggestion-item');
+        if (item) item.style.background = 'transparent';
+    });
+
+    suggestionsBox.addEventListener('click', (e) => {
+        const item = e.target.closest('.suggestion-item');
+        if (item) {
+            const targetText = item.getAttribute('data-text');
+            const targetId = item.getAttribute('data-id');
+            
+            searchInput.value = targetText;
+            suggestionsBox.style.display = 'none';
+            
+            // Auto scroll directly to the matching article card on the page
+            const targetCard = document.getElementById(targetId);
+            if (targetCard) {
+                targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                targetCard.style.outline = '2px solid #38bdf8';
+                setTimeout(() => targetCard.style.outline = 'none', 2000);
+            }
+        }
+    });
+
+    // Close suggestions box if visitor clicks outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.search-container')) {
+            suggestionsBox.style.display = 'none';
+        }
+    });
+});
