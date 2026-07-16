@@ -9,5 +9,20 @@
   <body>
     <p>Redirecting to the main TradExpress page…</p>
     <script>window.location.replace('../');</script>
-  </body>
+  </body><!-- Done Paste it right here at the bottom of tx/index.html -->
+    <script>
+    document.querySelectorAll('.trade-course-item').forEach(item => {
+        const playButton = item.querySelector('.play-btn');
+        if (playButton) {
+            playButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                item.classList.toggle('expanded');
+                playButton.style.transform = item.classList.contains('expanded') 
+                    ? 'rotate(90deg)' 
+                    : 'rotate(0deg)';
+            });
+        }
+    });
+    </script>
+</body>
 </html>
