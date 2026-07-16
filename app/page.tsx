@@ -29,10 +29,8 @@ type TradExpressConfig = {
     description: string;
   };
 };
-
-const articles = require('../articles.json') as Article[];
-const tradexpressConfig = require('../tradexpress.json') as TradExpressConfig;
-
+import articles from '../articles.json';
+import authorship from '../AUTHORSHIP.json';
 export default function Page() {
   const [query, setQuery] = useState('');
   const [selectedTag, setSelectedTag] = useState('All');
@@ -41,7 +39,7 @@ export default function Page() {
   const [isLoading, setIsLoading] = useState(true);
 
   const bumpCount = (key: string) => {
-    setClickCounts((prev) => ({ ...prev, [key]: (prev[any] ?? 0) + 1 }));
+    setClickCounts((prev) => ({ ...prev, [key]: ((prev: any) => ... ?? 0) + 1 }));
   };
 
   const tags = useMemo(() => {
@@ -210,7 +208,7 @@ export default function Page() {
             <div style={{ display: 'grid', gap: '8px' }}>
               <div style={{ padding: '8px 10px', borderRadius: '8px', background: 'rgba(87, 193, 255, 0.1)', border: '1px solid rgba(87, 193, 255, 0.18)' }}>
                 <div style={{ fontWeight: 700, color: '#dff5ff', marginBottom: '4px' }}>Digital Container</div>
-                <a href="https://tradexpress.com/#container" style={{ color: '#98deff', textDecoration: 'none' }}>tradexpress.com/#container</a>
+                <a href="https://tradexpress.co/#container" style={{ color: '#98deff', textDecoration: 'none' }}>tradexpress.com/#container</a>
               </div>
               <div style={{ padding: '8px 10px', borderRadius: '8px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.12)' }}>
                 <div style={{ fontWeight: 700, color: '#dff5ff', marginBottom: '4px' }}>Physical Container</div>
