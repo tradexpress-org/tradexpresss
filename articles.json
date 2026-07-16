@@ -1,86 +1,47 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // --- CALENDAR LOGIC ---
-    const monthYearEl = document.getElementById('calendar-month-year');
-    const calendarGrid = document.getElementById('calendar-grid');
-    const today = new Date();
-    
-    const daysOfWeek = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
-    
-    // Set headers
-    monthYearEl.innerText = today.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-    calendarGrid.innerHTML = daysOfWeek.map(d => `<div style="font-weight:600; color:#64748b; padding-bottom:5px;">${d}</div>`).join('');
-    
-    const firstDayIndex = new Date(today.getFullYear(), today.getMonth(), 1).getDay();
-    const lastDay = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
-    
-    // Blank days before first day of month
-    for (let i = 0; i < firstDayIndex; i++) {
-        calendarGrid.innerHTML += `<div></div>`;
-    }
-    
-    // Populate month days
-    for (let day = 1; day <= lastDay; day++) {
-        const isToday = day === today.getDate();
-        const dayStyle = isToday 
-            ? `background: #38bdf8; color: #0f172a; font-weight: bold; border-radius: 6px;` 
-            : `background: #1e293b; border-radius: 6px;`;
-            
-        calendarGrid.innerHTML += `<div style="padding: 8px 0; ${dayStyle}">${day}</div>`;
-    }
-
-    // --- TO-DO LIST LOGIC ---
-    const todoInput = document.getElementById('todo-input');
-    const addTodoBtn = document.getElementById('add-todo-btn');
-    const todoList = document.getElementById('todo-list');
-    
-    // Load existing items from localStorage
-    let savedTasks = JSON.parse(localStorage.getItem('tx_tasks')) || [
-        { text: "Coordinate container tracking with Broker Ferddy", completed: false },
-        { text: "Verify updated HS codes inside articles.json", completed: true }
-    ];
-
-    function renderTasks() {
-        todoList.innerHTML = '';
-        savedTasks.forEach((task, index) => {
-            const li = document.createElement('li');
-            li.style = "display: flex; justify-content: space-between; align-items: center; padding: 10px; background: #1e293b; border-radius: 6px; margin-bottom: 8px; font-size: 0.85rem;";
-            if (task.completed) li.style.opacity = "0.5";
-
-            li.innerHTML = `
-                <div style="display: flex; align-items: center; gap: 8px; flex: 1; cursor: pointer;" onclick="toggleTask(${index})">
-                    <input type="checkbox" ${task.completed ? 'checked' : ''} style="cursor: pointer;">
-                    <span style="${task.completed ? 'text-decoration: line-through;' : ''}">${task.text}</span>
-                </div>
-                <button onclick="deleteTask(${index})" style="background: none; border: none; color: #ef4444; cursor: pointer; font-size: 1rem; padding: 0 4px;">&times;</button>
-            `;
-            todoList.appendChild(li);
-        });
-        localStorage.setItem('tx_tasks', JSON.stringify(savedTasks));
-    }
-
-    window.toggleTask = (index) => {
-        savedTasks[index].completed = !savedTasks[index].completed;
-        renderTasks();
-    };
-
-    window.deleteTask = (index) => {
-        savedTasks.splice(index, 1);
-        renderTasks();
-    };
-
-    addTodoBtn.addEventListener('click', () => {
-        const text = todoInput.value.trim();
-        if (text) {
-            savedTasks.push({ text, completed: false });
-            todoInput.value = '';
-            renderTasks();
-        }
-    });
-
-    todoInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') addTodoBtn.click();
-    });
-
-    renderTasks();
-});
-</script>
+[
+  {
+    "id": "art-001",
+    "title": "Understanding BOC Assessment Workflows",
+    "category": "Customs Procedure",
+    "tags": ["BOC", "Assessment", "Clearance", "Filing"],
+    "summary": "A comprehensive breakdown of the Bureau of Customs formal entry processing, from electronic manifest submission to final gate clearance.",
+    "hs_code_range": "N/A",
+    "last_updated": "2026-07-16"
+  },
+  {
+    "id": "art-002",
+    "title": "HS Code Breakdown: Electronics & Machinery",
+    "category": "Tariff Classification",
+    "tags": ["HS Code", "Electronics", "Section XVI", "Duties"],
+    "summary": "Guidelines for classifying imported computing hardware and industrial components under Chapter 84 and 85 to prevent misdeclaration penalties.",
+    "hs_code_range": "8401.00.00 - 8548.00.00",
+    "last_updated": "2026-07-15"
+  },
+  {
+    "id": "art-003",
+    "title": "FDA Certificate of Product Registration (CPR)",
+    "category": "Regulatory Clearance",
+    "tags": ["FDA", "Permit", "CPR", "SPSIC"],
+    "summary": "Step-by-step compliance rules for securing mandatory Food and Drug Administration clearances prior to the arrival of regulated commodities.",
+    "hs_code_range": "2101.00.00 - 2209.00.00",
+    "last_updated": "2026-07-10"
+  },
+  {
+    "id": "art-004",
+    "title": "Broker Representation Requirements",
+    "category": "Legal Operations",
+    "tags": ["Broker", "Ferddy Mark Sardan", "Documentation", "B/L"],
+    "summary": "Mandatory authorization documents required to designate Broker Ferddy Mark Sardan as your official declarant before the Bureau of Customs.",
+    "hs_code_range": "N/A",
+    "last_updated": "2026-07-16"
+  },
+  {
+    "id": "art-005",
+    "title": "Managing Urgent Container Hold Protocols",
+    "category": "Logistics & Risk",
+    "tags": ["Hold", "BOC", "Container", "X-Ray"],
+    "summary": "What to do when your container is flagged for an X-ray or physical examination alert, and how to route documentation instantly to reduce demurrage.",
+    "hs_code_range": "N/A",
+    "last_updated": "2026-07-14"
+  }
+]
