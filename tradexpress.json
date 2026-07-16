@@ -1,0 +1,15 @@
+{
+  "name": "TradExpress",
+  "agent": {
+    "label": "Set agent inside TradExpress",
+    "description": "Configure the agent within the TradExpress interface before continuing."
+  },
+  "keyboardSettings": {
+    "label": "Select keyboard settings",
+    "description": "Open the keyboard settings section after the agent is configured."
+  },
+  "consent": {
+    "label": "Ask they/them before pull request",
+    "description": "Confirm consent with they/them before sending or approving a TradExpress pull request."
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    { "source": "/tradexpress", "destination": "/" },
+    { "source": "/tradexpress/", "destination": "/" },
+    { "source": "/tx", "destination": "/" },
+    { "source": "/tx/", "destination": "/" }
+  ]
+}

@@ -1,0 +1,4 @@
+Restore point created for local library UI changes.
+- Added local library page with article search and filters.
+- Added Contact, Account, Passcode, and Webauth quick links.
+- Added Directory 1, Directory 2, and Auto Record Media sections.
