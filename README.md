@@ -2,6 +2,9 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+Multi Zones
+Last updated June 13, 2023-2026
+
 First, run the development server:
 
 ```bash
